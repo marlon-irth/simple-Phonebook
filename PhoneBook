@@ -1,0 +1,157 @@
+//Import packages
+import java.util.ArrayList;
+import java.util.Scanner;
+
+//Contact class
+class Contact {
+    
+    //Attributes
+    private String name;
+    private String number;
+
+    //Constructor 
+    public Contact(String name, String number) {
+        this.name = name;
+        this.number = number;
+    }
+
+    //Methods
+    //Getter-methods (read only)
+    public String getName() {
+        return name;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    //Setter-methods (write only)
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    //Overrides standard implementation of ‘toString’ (from class Objects) so that the output of an object of this class is readable (and not cryptographic)
+    @Override
+    public String toString() {
+        return name + ": " + number;
+    }
+}
+
+
+//——————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+//Main class
+public class Main {
+    //Attributes 
+    private static ArrayList<Contact> contacts = new ArrayList<>();
+    private static Scanner inputScanner = new Scanner(System.in);
+    
+    //Methods 
+    public static void main(String[] args) {
+        boolean active = true;
+
+        //Welcome message/promt
+        while (active) {
+            System.out.println("Telefonbuch - Optionen:");
+            System.out.println("1. Telefonbuch anzeigen");
+            System.out.println("2. Neue Nummer hinzufügen");
+            System.out.println("3. Vorhandene Nummer bearbeiten");
+            System.out.println("4. Nummer löschen");
+            System.out.println("5. Beenden");
+            System.out.print("Wähle eine der obigen Optionen. ");
+
+            int option = inputScanner.nextInt();
+            inputScanner.nextLine(); //Empty buffer 
+
+            //switch/case option selection 
+            switch (option) {
+                case 1:
+                    viewPhonebook();
+                    break;
+                case 2:
+                    addNumber();
+                    break;
+                case 3:
+                    editNumber();
+                    break;
+                case 4:
+                    deleteNumber();
+                    break;
+                case 5:
+                    active = false;
+                    System.out.println("Programm beendet.");
+                    break;
+                default:
+                    System.out.println("Ungültige Option. Bitte versuchen Sie es erneut.");
+            }
+        }
+    }
+
+    //Method viewPhonebook
+    private static void viewPhonebook() {
+        if (contacts.isEmpty()) {
+            System.out.println("Das Telefonbuch ist leer.");
+        } else {
+            System.out.println("Telefonbuch:");
+            for (int i = 0; i < contacts.size(); i++) {
+                System.out.println((i + 1) + ". " + contacts.get(i));
+            }
+        }
+    }
+
+    //Method addNumber
+    private static void addNumber() {
+        System.out.print("Gib den Namen der Person ein, die du hinzufügen möchtest: ");
+        String name = inputScanner.nextLine();
+        System.out.print("Gib nun die dazugehörige Telefonnummer ein: ");
+        String number = inputScanner.nextLine();
+
+        contacts.add(new Contact(name, number));
+        System.out.println("Kontakt hinzugefügt.");
+    }
+
+    //Method editNumber
+    private static void editNumber() {
+        viewPhonebook();
+        if (!contacts.isEmpty()) {
+            System.out.print("Wähle den zu bearbeitenden Kontakt: ");
+            int index = inputScanner.nextInt() - 1;
+            inputScanner.nextLine(); //Empty buffer
+
+            if (index >= 0 && index < contacts.size()) {
+                System.out.print("Gib den neuen Namen ein: ");
+                String name = inputScanner.nextLine();
+                System.out.print("Gib die neue Telefonnummer ein: ");
+                String number = inputScanner.nextLine();
+
+                contacts.get(index).setName(name);
+                contacts.get(index).setNumber(number);
+                System.out.println("Kontakt aktualisiert.");
+            } else {
+                System.out.println("Ungültige Auswahl.");
+            }
+        }
+    }
+
+    //Method deleteNumber
+    private static void deleteNumber() {
+        viewPhonebook();
+        if (!contacts.isEmpty()) {
+            System.out.print("Wähle den zu löschenden Kontakt: ");
+            int index = inputScanner.nextInt() - 1;
+            inputScanner.nextLine(); //Empty buffer
+
+            if (index >= 0 && index < contacts.size()) {
+                contacts.remove(index);
+                System.out.println("Kontakt gelöscht.");
+            } else {
+                System.out.println("Ungültige Auswahl.");
+            }
+        }
+    }
+}
